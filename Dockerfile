@@ -4,7 +4,7 @@ RUN apk update && apk add ca-certificates
 FROM golang:latest
 WORKDIR /apps
 ADD . .
-RUN GOOS="linux" GOARCH="amd64" go build -o fluxcloud ./cmd/
+RUN go build -o fluxcloud ./cmd/
 
 FROM gcr.io/distroless/static@sha256:48e0d165f07d499c02732d924e84efbc73df8021b12c24940e18a9306589430e
 COPY --from=0 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
