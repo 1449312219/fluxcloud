@@ -16,6 +16,7 @@ import (
 // The Webhook exporter sends Flux events to a Webhook channel via a webhook.
 type Webhook struct {
 	Url string
+	Additional string
 }
 
 // Initialize a new Webhook instance
@@ -24,6 +25,11 @@ func NewWebhook(config config.Config) (*Webhook, error) {
 	s := Webhook{}
 
 	s.Url, err = config.Required("Webhook_url")
+	if err != nil {
+		return nil, err
+	}
+	
+	s.Additional, err = config.Optional("Additional", "")
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +50,7 @@ func (s *Webhook) Send(c context.Context, client *http.Client, message msg.Messa
 
 	req, _ := http.NewRequest("POST", s.Url, b)
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Additional", s.Additional)
 	req = req.WithContext(c)
 
 	res, err := client.Do(req)
