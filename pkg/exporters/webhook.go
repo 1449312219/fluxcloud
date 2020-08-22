@@ -29,10 +29,7 @@ func NewWebhook(config config.Config) (*Webhook, error) {
 		return nil, err
 	}
 	
-	s.Additional, err = config.Optional("Additional", "")
-	if err != nil {
-		return nil, err
-	}
+	s.Additional = config.Optional("Additional", "")
 
 	return &s, nil
 }
